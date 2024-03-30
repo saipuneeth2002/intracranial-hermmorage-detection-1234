@@ -1,0 +1,25 @@
+def predict():
+    global model
+    filename = filedialog.askopenfilename(initialdir="testImages")
+    image = cv2.imread(filename)
+    img = cv2.resize(image, (64,64))
+    im2arr = np.array(img)
+    im2arr = im2arr.reshape(1,64,64,3)
+    img = np.asarray(im2arr)
+    img = img.astype('float32')
+    img = img/255
+    preds = model.predict(img)
+    predict = np.argmax(preds)
+
+    if predict == 0:
+        img = cv2.imread(filename)
+        img = cv2.resize(img, (400,400))
+        cv2.putText(img, 'No Hemorrhage Detected', (10, 25),  cv2.FONT_HERSHEY_SIMPLEX,0.7, (255, 0, 0), 2)
+        cv2.imshow('No Hemorrhage Detected', img)
+        cv2.waitKey(0)
+    if predict == 1:
+        img = cv2.imread(filename)
+        img = cv2.resize(img, (400,400))
+        cv2.putText(img, 'Hemorrhage Detected', (10, 25),  cv2.FONT_HERSHEY_SIMPLEX,0.7, (255, 0, 0), 2)
+        cv2.imshow('Hemorrhage Detected', img)
+        cv2.waitKey(0)
